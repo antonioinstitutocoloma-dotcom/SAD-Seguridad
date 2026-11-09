@@ -33,7 +33,18 @@ En el firewall (`./lab.sh fw`): `tcpdump -ni wan host 198.51.100.62 -c 6`. Mient
 (`./lab.sh comercial`) hace `curl http://172.16.10.20:8080`. Pega lo que sale en el firewall:
 
 ```text
-(pega aquí la salida de tcpdump)
+tcpdump: verbose output suppressed, use -v[v]... for full protocol decode
+listening on wan, link-type EN10MB (Ethernet), snapshot length 262144 bytes
+19:40:47.916676 IP 198.51.100.254.51820 > 198.51.100.62.49644: UDP, length 32
+19:40:49.126689 IP 198.51.100.62.49644 > 198.51.100.254.51820: UDP, length 96
+19:40:49.126836 IP 198.51.100.254.51820 > 198.51.100.62.49644: UDP, length 96
+19:40:49.126914 IP 198.51.100.62.49644 > 198.51.100.254.51820: UDP, length 96
+19:40:49.126962 IP 198.51.100.62.49644 > 198.51.100.254.51820: UDP, length 176
+19:40:49.127028 IP 198.51.100.254.51820 > 198.51.100.62.49644: UDP, length 96
+6 packets captured
+11 packets received by filter
+0 packets dropped by kernel
+
 ```
 
 En dos líneas: ¿qué se ve por la calle y qué NO se ve?
