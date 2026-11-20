@@ -68,4 +68,15 @@ Nota del análisis **antes** de bastionar (D0):
 
 Nota **después** (D4). ¿Por qué no llega a 100? ¿Significa que el servidor sigue inseguro? Comenta un aviso que siga saliendo.
 
->
+> ## D4 · Auditoría con Lynis
+
+* **Nota del servidor (Hardening Index):** `63 / 100`
+
+* **Explicación de un aviso restante (`SSH-7408` – `AllowTcpForwarding`):**
+  Lynis advierte que la directiva `AllowTcpForwarding` está establecida en `YES` (su valor por defecto) en la configuración del servicio SSH (`/etc/ssh/sshd_config`) y recomienda cambiarla a `NO`. 
+  * **Riesgo:** Si se deja habilitada, un usuario o atacante que consiga acceso por SSH al servidor puede crear túneles TCP (port forwarding) para saltar restricciones del cortafuegos y pivotar hacia otros servicios internos de la red que no deberían estar expuestos al exterior.
+  * **Solución:** Añadir o modificar la línea `AllowTcpForwarding no` en `/etc/ssh/sshd_config` (o en un fichero dentro de `/etc/ssh/sshd_config.d/`) y recargar el demonio SSH (`systemctl reload ssh`).
+* **Explicación de un aviso restante (`HTTP-6710` – HTTPS en Nginx):**
+  Lynis detecta que los *virtual hosts* configurados en Nginx sirven el tráfico únicamente por HTTP en claro (puerto 80) sin cifrado TLS/SSL.
+  * **Riesgo:** Toda la información transmitida entre los clientes y el servidor de reservas (como credenciales de inicio de sesión, tokens de sesión o datos personales) viaja sin cifrar por la red, quedando expuesta a ataques de interceptación (*sniffing* / *Man-in-the-Middle*).
+  * **Solución:** Configurar un certificado digital (por ejemplo, autofirmado con OpenSSL o mediante Certbot/Let's Encrypt) en el bloque `server` de Nginx escuchando en el puerto `443 ssl` y redirigir las peticiones HTTP a HTTPS.
